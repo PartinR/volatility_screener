@@ -37,12 +37,17 @@ def save_tickers(tickers, filename="spx_tickers.csv"):
     """
     Saves the list of tickers to the /data directory.
     """
-    root = get_project_root()
-    filepath = os.path.join(root, "data", filename)
-    
-    df = pd.DataFrame(tickers, columns=["Ticker"])
-    df.to_csv(filepath, index=False)
-    logger.info(f"Tickers saved to {filepath}")
+    try:
+        root = get_project_root()
+        data_dir = os.path.join(root, "data")
+        os.makedirs(data_dir, exist_ok=True)
+        filepath = os.path.join(data_dir, filename)
+        
+        df = pd.DataFrame(tickers, columns=["Ticker"])
+        df.to_csv(filepath, index=False)
+        logger.info(f"Tickers saved to {filepath}")
+    except Exception as e:
+        logger.error(f"Failed to save tickers to {filename}: {e}")
 
 if __name__ == "__main__":
     # Test the scraper
